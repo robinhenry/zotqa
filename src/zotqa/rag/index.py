@@ -192,7 +192,13 @@ class VectorIndex:
         """Get index statistics."""
         if not self.metadata:
             return None
-        return IndexStats(**self.metadata)
+        return IndexStats(
+            num_papers=self.metadata["num_papers"],
+            num_chunks=self.metadata["num_chunks"],
+            embedding_dim=self.metadata["embedding_dim"],
+            indexed_at=self.metadata["indexed_at"],
+            corpus_path=self.metadata["corpus_path"],
+        )
 
     def search(
         self,

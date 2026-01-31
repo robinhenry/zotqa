@@ -1,6 +1,6 @@
 # zotqa
 
-A minimal, local-first CLI tool for querying your Zotero library with LLM assistance. Ask questions about papers you've read and notes you've taken.
+A minimal tool for querying your Zotero library with LLM assistance. Ask questions about papers you've read and notes you've taken.
 
 ## Features
 
@@ -9,6 +9,10 @@ A minimal, local-first CLI tool for querying your Zotero library with LLM assist
 - **Notes-first retrieval**: Prioritizes your notes over paper abstracts
 - **LLM-agnostic**: Pluggable embedding and LLM backends (Voyage AI, OpenAI, Anthropic)
 - **Single LLM call**: Optimized for one generation call per query
+
+## Requirements
+
+It assumes Zotero is setup to save the .pdf of the papers in your library locally (e.g., in `~/Zotero/storage/`).
 
 ## Installation
 
@@ -21,14 +25,14 @@ poetry install
 # Install with embedding provider support
 poetry install -E voyage  # For Voyage AI embeddings
 poetry install -E openai  # For OpenAI embeddings
-poetry install -E all     # For all providers
+poetry install -E all     # For all providers (includes both embedding providers)
 ```
 
 ## Configuration
 
 Set your API keys as environment variables:
 
-```bash
+```**bash**
 # For embeddings (choose one)
 export VOYAGE_API_KEY="your-voyage-key"
 # OR
@@ -72,6 +76,16 @@ zotqa index ./corpus --embedding-provider openai
 
 # Custom index location
 zotqa index ./corpus --index-dir ~/.zotqa/my-index
+
+# Force full rebuild (ignore incremental updates)
+zotqa index ./corpus --force
+
+# Skip PDF body extraction (only index notes, abstract, metadata)
+zotqa index ./corpus --no-pdf
+
+# Check index statistics
+zotqa info
+zotqa info --index-dir ~/.zotqa/my-index
 ```
 
 ### 3. Ask questions
@@ -93,11 +107,20 @@ zotqa ask "What papers discuss transformers?" --json
 zotqa ask "What is the main contribution?" -q
 ```
 
-### 4. Check index status
+### 4. Use the Web UI (optional)
 
 ```bash
-zotqa info
+# Launch interactive web interface
+zotqa ui
 ```
+
+This opens a Streamlit-based chat interface in your browser where you can:
+- Ask questions through an interactive chat interface
+- View full conversation history
+- See source citations with similarity scores for each answer
+- Track token usage per query
+
+The web UI provides the same two-layer answer structure and provenance tracking as the CLI, but in a more interactive format.
 
 ## Answer Structure
 
@@ -108,7 +131,7 @@ Every answer follows a two-layer format:
 [Your notes and interpretations about the topic]
 
 ## Author-Claims Layer
-[What the papers claim, with citations like [PAPER001|abstract]]
+[What the papers claim, with citations like [Smith (2023)|abstract]]
 
 ## Synthesis (optional)
 [When comparing multiple papers]
@@ -123,29 +146,20 @@ $ zotqa ask "What did I note about attention mechanisms?"
 
 ## User-Notes Layer
 Your notes highlight that attention mechanisms enable models to focus on relevant
-parts of input sequences [PAPER003|notes]. You found this particularly interesting
+parts of input sequences [Lee (2024)|notes]. You found this particularly interesting
 for DNA sequence analysis applications.
 
 ## Author-Claims Layer
 The paper "Transformers for Genomics" demonstrates that transformer models with
-self-attention can effectively process genomic sequences [PAPER003|abstract].
+self-attention can effectively process genomic sequences [Lee (2024)|abstract].
 
 ---
 Used chunks:
-  [PAPER003|notes] (score: 0.892)
-  [PAPER003|abstract] (score: 0.756)
+  [Lee (2024) | PAPER003 | notes] (score: 0.892)
+  [Lee (2024) | PAPER003 | abstract] (score: 0.756)
 
 Tokens: 1245 in / 187 out
 ```
-
-## Acceptance Criteria (v1)
-
-- [x] `index` builds searchable index and persists embeddings
-- [x] `ask` returns two-layer answers with citations
-- [x] Returns list of used chunks and token cost
-- [x] Single LLM generation call per query
-- [x] Metadata filtering via CLI flags
-- [x] Conservative failure behavior (insufficient evidence / labeled inference)
 
 ## Development
 
