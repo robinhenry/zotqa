@@ -1,5 +1,7 @@
 # zotqa
 
+**Query your own Zotero notes and library 📚**
+
 A minimal tool for querying your Zotero library with LLM assistance. Ask questions about papers you've read and notes you've taken.
 
 ## Features
@@ -16,7 +18,7 @@ It assumes Zotero is setup to save the .pdf of the papers in your library locall
 
 ## Installation
 
-```bash
+```shell
 # Clone and install
 git clone https://github.com/yourusername/zotqa.git
 cd zotqa

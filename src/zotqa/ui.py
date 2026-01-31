@@ -15,7 +15,7 @@ def init_engine() -> QueryEngine | None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="ZotQA", page_icon="📚", layout="centered")
+    st.set_page_config(page_title="ZotQA", page_icon="📚", layout="wide")
     st.title("📚 Zot QA")
     st.caption("Ask questions about your Zotero library")
 
