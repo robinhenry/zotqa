@@ -4,6 +4,8 @@
 
 A minimal tool for querying your Zotero library with LLM assistance. Ask questions about papers you've read and notes you've taken.
 
+![ZotQA UI example screenshot](assets/ui-example.png)
+
 ## Features
 
 - **Two-layer answers**: Every response separates your notes (your interpretations) from author claims (paper content)
