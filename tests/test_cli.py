@@ -50,6 +50,7 @@ class TestCLI:
         assert "index" in result.stdout
         assert "info" in result.stdout
         assert "ask" in result.stdout
+        assert "init-prompts" in result.stdout
 
     def test_info_no_index(self, tmp_path: Path) -> None:
         """Test info command with no index."""

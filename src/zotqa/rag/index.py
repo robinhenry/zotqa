@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 import numpy as np
+from platformdirs import user_data_dir
 from tqdm import tqdm
 
 from zotqa.rag.chunk import Chunk, chunk_paper, compute_paper_hash
@@ -69,15 +70,16 @@ class VectorIndex:
         new_papers = set(current_hashes.keys()) - set(existing_hashes.keys())
         deleted_papers = set(existing_hashes.keys()) - set(current_hashes.keys())
         changed_papers = {
-            pid for pid in current_hashes
-            if pid in existing_hashes and current_hashes[pid] != existing_hashes[pid]
+            pid for pid in current_hashes if pid in existing_hashes and current_hashes[pid] != existing_hashes[pid]
         }
         papers_to_index = new_papers | changed_papers
         unchanged_papers = set(current_hashes.keys()) - papers_to_index
 
         if show_progress:
-            print(f"Papers: {len(new_papers)} new, {len(changed_papers)} changed, "
-                  f"{len(deleted_papers)} deleted, {len(unchanged_papers)} unchanged")
+            print(
+                f"Papers: {len(new_papers)} new, {len(changed_papers)} changed, "
+                f"{len(deleted_papers)} deleted, {len(unchanged_papers)} unchanged"
+            )
 
         # If nothing changed and index exists, return early
         if not papers_to_index and not deleted_papers and self.chunks:
@@ -236,4 +238,4 @@ class VectorIndex:
 
 def get_default_index_dir() -> Path:
     """Get the default index directory."""
-    return Path.home() / ".zotqa" / "index"
+    return Path(user_data_dir("zotqa", appauthor=False)) / "index"

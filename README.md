@@ -18,6 +18,16 @@ A minimal tool for querying your Zotero library with LLM assistance. Ask questio
 
 It assumes Zotero is setup to save the .pdf of the papers in your library locally (e.g., in `~/Zotero/storage/`).
 
+## Platform Support
+
+**zotqa** works cross-platform on Linux, macOS, and Windows.
+
+**Windows-specific notes:**
+- PDFs are copied instead of symlinked (symlinks require admin privileges on Windows)
+- Config files are stored in `%APPDATA%\zotqa\prompts\` instead of `~/.config/zotqa/`
+- Index is stored in `%LOCALAPPDATA%\zotqa\index\` instead of `~/.zotqa/index/`
+- Default Zotero paths work with standard installations (`C:\Users\<username>\Zotero\`)
+
 ## Installation
 
 ```shell
@@ -65,7 +75,7 @@ corpus/
 └── papers/<key>/
     ├── metadata.json   # title, year, authors, abstract, tags
     ├── notes.md        # your notes (if any)
-    └── paper.pdf       # symlink to original
+    └── paper.pdf       # symlink to original (copy on Windows)
 ```
 
 ### 2. Build the vector index
@@ -124,6 +134,26 @@ This opens a Streamlit-based chat interface in your browser where you can:
 - Track token usage per query
 
 The web UI provides the same two-layer answer structure and provenance tracking as the CLI, but in a more interactive format.
+
+## Customization
+
+### Custom Prompts
+
+You can customize the system and user prompts that guide the LLM's responses.
+
+```bash
+# Initialize user prompts (copies defaults to ~/.config/zotqa/prompts/)
+zotqa init-prompts
+
+# Overwrite existing custom prompts
+zotqa init-prompts --force
+```
+
+This creates editable copies at `~/.config/zotqa/prompts/`:
+- `system.md` - System prompt defining the assistant's behavior
+- `user.md` - User prompt template (with `{context}` and `{question}` placeholders)
+
+Once initialized, zotqa will use your custom prompts instead of the defaults. Edit these files to change how the assistant structures answers, handles citations, or responds to queries.
 
 ## Answer Structure
 

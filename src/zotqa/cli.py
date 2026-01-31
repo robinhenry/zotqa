@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from zotqa.extract import export_papers, get_papers
+from zotqa.prompts import get_user_prompts_dir, init_user_prompts
 from zotqa.rag import (
     QueryEngine,
     VectorIndex,
@@ -159,6 +160,26 @@ def cmd_ask(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_init_prompts(args: argparse.Namespace) -> int:
+    """Copy default prompts to user config directory for customization."""
+    prompts_dir = get_user_prompts_dir()
+
+    try:
+        result_dir = init_user_prompts(force=args.force)
+        print(f"Prompts initialized at: {result_dir}")
+        print("\nYou can now customize these prompts:")
+        for prompt_file in sorted(result_dir.glob("*.md")):
+            print(f"  - {prompt_file.name}")
+        return 0
+    except FileExistsError:
+        print(f"Error: Prompts already exist at {prompts_dir}")
+        print("Use --force to overwrite.")
+        return 1
+    except Exception as e:
+        print(f"Error initializing prompts: {e}")
+        return 1
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Query your Zotero library with LLM assistance",
@@ -195,7 +216,8 @@ def main() -> int:
         help="Embedding provider (default: auto-detect based on API keys)",
     )
     index_parser.add_argument(
-        "--force", "-f",
+        "--force",
+        "-f",
         action="store_true",
         help="Force full rebuild (ignore incremental updates)",
     )
@@ -222,6 +244,12 @@ def main() -> int:
     ask_parser.add_argument("--json", action="store_true", help="Output as JSON")
     ask_parser.add_argument("-q", "--quiet", action="store_true", help="Only show answer, no metadata")
 
+    # Init prompts command
+    init_prompts_parser = subparsers.add_parser(
+        "init-prompts", help="Copy default prompts to user config directory for customization"
+    )
+    init_prompts_parser.add_argument("--force", "-f", action="store_true", help="Overwrite existing user prompts")
+
     args = parser.parse_args()
 
     if args.command is None:
@@ -238,6 +266,8 @@ def main() -> int:
         return cmd_ui(args)
     elif args.command == "ask":
         return cmd_ask(args)
+    elif args.command == "init-prompts":
+        return cmd_init_prompts(args)
 
     return 0
 

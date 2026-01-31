@@ -1,7 +1,9 @@
 """Export Zotero papers to RAG-friendly directory structure."""
 
 import json
+import platform
 import re
+import shutil
 from pathlib import Path
 
 from zotqa.extract.db import Paper
@@ -34,12 +36,17 @@ def export_papers(papers: list[Paper], output_dir: Path) -> None:
             notes_md = _convert_notes_to_markdown(paper.notes)
             (paper_dir / "notes.md").write_text(notes_md)
 
-        # Symlink PDF
+        # Link or copy PDF (Windows requires copy due to symlink permissions)
         if paper.pdf_path:
             pdf_link = paper_dir / "paper.pdf"
             if pdf_link.exists() or pdf_link.is_symlink():
                 pdf_link.unlink()
-            pdf_link.symlink_to(paper.pdf_path)
+
+            # On Windows, symlinks require admin privileges, so we copy instead
+            if platform.system() == "Windows":
+                shutil.copy2(paper.pdf_path, pdf_link)
+            else:
+                pdf_link.symlink_to(paper.pdf_path)
 
         # Add to index
         index.append(
