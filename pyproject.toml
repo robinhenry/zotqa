@@ -1,0 +1,98 @@
+[project]
+name = "zotqa"
+version = "0.1.0"
+description = "Zotero + LLMs"
+authors = [
+    { name = "Robin Henry", email = "robin.henry012@gmail.com" },
+]
+readme = "README.md"
+packages = [
+    { include = "zotqa", from = "src" },
+]
+exclude = ["tests", "tests.*"]
+
+[tool.poetry.scripts]
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.9.0"
+mypy = "^1.0"
+pytest = "^8.3.4"
+pytest-cov = "^7.0.0"
+ruff = "^0.13.3"
+pre-commit = "^4.1.0"
+
+# This block will ensure that the version number is automatically detected from the git tag
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+pattern = "^v?(?P<base>\\d+(\\.\\d+)*)"
+bump = true
+
+[build-system]
+requires = ["poetry-core>=1.3.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+files = ["src/zotqa/**/*.py"]
+
+[tool.coverage.run]
+source = ["zotqa"]
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+target-version = "py311"
+
+# Same as Black.
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+# E731 = do not assign a lambda expression, use a def instead
+ignore = ["E731"]
+fixable = ["ALL"]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.isort]
+known-first-party = ["zotqa"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+combine-as-imports = true

@@ -1,0 +1,25 @@
+venv
+.idea
+.coverage
+htmlcov/
+*.pyc
+*.nl
+*.lp
+*.ipynb_checkpoints
+dist/
+build/
+old/
+paper/
+*.DS_Store
+.vscode/
+.venv/
+*.prof
+data/
+*.out
+wandb
+__pycache__/
+
+
+# Hydra outputs
+outputs/
+multirun/
