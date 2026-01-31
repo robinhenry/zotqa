@@ -51,7 +51,7 @@ export ANTHROPIC_API_KEY="your-anthropic-key"
 ### 1. Export your Zotero library
 
 ```bash
-# Export all papers
+# Export all papers and notes
 zotqa export ./corpus
 
 # Custom Zotero paths
@@ -120,7 +120,6 @@ zotqa ui
 
 This opens a Streamlit-based chat interface in your browser where you can:
 - Ask questions through an interactive chat interface
-- View full conversation history
 - See source citations with similarity scores for each answer
 - Track token usage per query
 
