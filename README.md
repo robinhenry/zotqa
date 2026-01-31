@@ -12,7 +12,7 @@ A minimal tool for querying your Zotero library with LLM assistance. Ask questio
 - **Provenance tracking**: See exactly which chunks were used to generate each answer
 - **Notes-first retrieval**: Prioritizes your notes over paper abstracts
 - **LLM-agnostic**: Pluggable embedding and LLM backends (Voyage AI, OpenAI, Anthropic)
-- **Single LLM call**: Optimized for one generation call per query
+- **Single LLM call**: Optimized for one generation call per query (typically $0.01 - $0.1 per query)
 
 ## Requirements
 
