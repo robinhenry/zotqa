@@ -121,7 +121,31 @@ zotqa ask "What papers discuss transformers?" --json
 zotqa ask "What is the main contribution?" -q
 ```
 
-### 4. Use the Web UI (optional)
+### 4. Use the Terminal Chat (optional)
+
+```bash
+# Start interactive terminal chat
+zotqa chat
+
+# Filter to specific papers
+zotqa chat --paper PAPER001 --paper PAPER002
+
+# Control retrieval and response length
+zotqa chat --max-chunks 15 --max-tokens 4096
+
+# Custom index location
+zotqa chat --index-dir ~/.zotqa/my-index
+```
+
+This launches an interactive chat session in your terminal where you can:
+- Ask multiple follow-up questions in a single session (conversation history is maintained)
+- See streaming responses rendered as markdown
+- Track per-query and session-total token usage
+- Navigate input history with arrow keys (saved to `~/.zotqa/chat_history`)
+
+Type `/exit` or `/quit` (or press `Ctrl+C`) to end the session.
+
+### 5. Use the Web UI (optional)
 
 ```bash
 # Launch interactive web interface
