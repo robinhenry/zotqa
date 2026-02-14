@@ -5,4 +5,4 @@ Context from your library:
 
 Question: {question}
 
-Answer with User-Notes Layer, then Author-Claims Layer. Add Synthesis if multiple papers apply.
+Answer with User Notes, then Author Claims. Add Synthesis if multiple papers apply.

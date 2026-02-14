@@ -160,6 +160,21 @@ def cmd_ask(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_chat(args: argparse.Namespace) -> int:
+    """Launch interactive terminal chat UI."""
+    from zotqa.chat import run_chat
+
+    index_dir = Path(args.index_dir) if args.index_dir else None
+    paper_filter = set(args.paper) if args.paper else None
+
+    return run_chat(
+        index_dir=index_dir,
+        max_chunks=args.max_chunks,
+        max_tokens=args.max_tokens,
+        paper_filter=paper_filter,
+    )
+
+
 def cmd_init_prompts(args: argparse.Namespace) -> int:
     """Copy default prompts to user config directory for customization."""
     prompts_dir = get_user_prompts_dir()
@@ -244,6 +259,13 @@ def main() -> int:
     ask_parser.add_argument("--json", action="store_true", help="Output as JSON")
     ask_parser.add_argument("-q", "--quiet", action="store_true", help="Only show answer, no metadata")
 
+    # Chat command
+    chat_parser = subparsers.add_parser("chat", help="Interactive terminal chat with your library")
+    chat_parser.add_argument("--index-dir", help="Directory containing index (default: ~/.zotqa/index)")
+    chat_parser.add_argument("--paper", action="append", help="Filter to specific paper ID(s)")
+    chat_parser.add_argument("--max-chunks", type=int, default=10, help="Max chunks per query (default: 10)")
+    chat_parser.add_argument("--max-tokens", type=int, default=2048, help="Max response tokens (default: 2048)")
+
     # Init prompts command
     init_prompts_parser = subparsers.add_parser(
         "init-prompts", help="Copy default prompts to user config directory for customization"
@@ -266,6 +288,8 @@ def main() -> int:
         return cmd_ui(args)
     elif args.command == "ask":
         return cmd_ask(args)
+    elif args.command == "chat":
+        return cmd_chat(args)
     elif args.command == "init-prompts":
         return cmd_init_prompts(args)
 

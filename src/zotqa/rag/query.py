@@ -261,6 +261,6 @@ def format_answer(result: QueryResult, show_chunks: bool = True, show_tokens: bo
             parts.append(f"  [{cite_display} | {chunk.paper_id} | {chunk.section}] (score: {chunk.score:.3f})")
 
     if show_tokens:
-        parts.append(f"\nTokens: {result.input_tokens} in / {result.output_tokens} out")
+        parts.append(f"\n\nTokens: {result.input_tokens} in / {result.output_tokens} out")
 
     return "\n".join(parts)
